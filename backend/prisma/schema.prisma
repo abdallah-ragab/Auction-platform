@@ -1,0 +1,216 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum AuctionStatus {
+  DRAFT
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+enum NotificationType {
+  outbid
+  won
+  sold
+  flagged
+  info
+}
+
+enum FraudStatus {
+  pending
+  allow
+  review
+  escalate
+}
+
+// ─── User ─────────────────────────────────────────────────────────────────────
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  name      String
+  phone     String?
+  bio       String?
+  avatarUrl String?
+  rating    Float     @default(0)
+  abGroup   String    @default("a")
+  isAdmin   Boolean   @default(false)
+  banned    Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+
+  auctions      Auction[]      @relation("AuctionSeller")
+  wonAuctions   Auction[]      @relation("AuctionWinner")
+  bids          Bid[]
+  reviews       Review[]
+  payments      Payment[]
+  watchlist     WatchlistItem[]
+  notifications Notification[]
+  botBlocks     BotBlock[]
+}
+
+// ─── Auction ──────────────────────────────────────────────────────────────────
+
+model Auction {
+  id            String        @id @default(uuid())
+  title         String
+  description   String
+  sellerId      String
+  category      String
+  startingPrice Float
+  currentPrice  Float
+  reservePrice  Float
+  imageUrls     String[]
+  status        AuctionStatus @default(DRAFT)
+  version       Int           @default(0)
+  startsAt      DateTime
+  endsAt        DateTime
+  createdAt     DateTime      @default(now())
+  deletedAt     DateTime?
+  // embedding: re-enable in Phase 2 when pgvector is added back
+  // embedding  Unsupported("vector(384)")?
+
+  winnerId  String?
+  seller    User            @relation(name: "AuctionSeller", fields: [sellerId], references: [id])
+  winner    User?           @relation(name: "AuctionWinner", fields: [winnerId], references: [id])
+  bids      Bid[]
+  payment   Payment?
+  watchlist WatchlistItem[]
+  reviews   Review[]
+  botBlocks BotBlock[]
+  notifications Notification[]
+
+  @@index([status])
+  @@index([status, endsAt])
+  @@index([sellerId])
+}
+
+// ─── Bid ──────────────────────────────────────────────────────────────────────
+
+model Bid {
+  id        String    @id @default(uuid())
+  userId    String
+  auctionId String
+  amount    Float
+  createdAt DateTime  @default(now())
+
+  user      User       @relation(fields: [userId], references: [id])
+  auction   Auction    @relation(fields: [auctionId], references: [id])
+  fraudFlag FraudFlag?
+
+  @@index([auctionId])
+  @@index([userId])
+  @@index([userId, createdAt])
+}
+
+// ─── Fraud Flag ───────────────────────────────────────────────────────────────
+
+model FraudFlag {
+  id        String      @id @default(uuid())
+  bidId     String      @unique
+  score     Float
+  signals   String[]
+  reason    String
+  reviewed  Boolean     @default(false)
+  status    FraudStatus @default(pending)
+  createdAt DateTime    @default(now())
+
+  bid Bid @relation(fields: [bidId], references: [id])
+}
+
+// ─── Review ───────────────────────────────────────────────────────────────────
+
+model Review {
+  id        String   @id @default(uuid())
+  auctionId String
+  userId    String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  auction Auction @relation(fields: [auctionId], references: [id])
+
+  @@unique([userId, auctionId])
+}
+
+// ─── Payment ──────────────────────────────────────────────────────────────────
+
+model Payment {
+  id              String        @id @default(uuid())
+  auctionId       String        @unique
+  buyerId         String
+  amount          Float
+  status          PaymentStatus @default(PENDING)
+  stripeSessionId String?
+  createdAt       DateTime      @default(now())
+
+  buyer   User    @relation(fields: [buyerId], references: [id])
+  auction Auction @relation(fields: [auctionId], references: [id])
+}
+
+// ─── Watchlist ────────────────────────────────────────────────────────────────
+
+model WatchlistItem {
+  id        String   @id @default(uuid())
+  userId    String
+  auctionId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  auction Auction @relation(fields: [auctionId], references: [id])
+
+  @@unique([userId, auctionId])
+}
+
+// ─── Bot Block ────────────────────────────────────────────────────────────────
+
+model BotBlock {
+  id         String   @id @default(uuid())
+  userId     String
+  auctionId  String
+  confidence Float
+  reason     String
+  createdAt  DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  auction Auction @relation(fields: [auctionId], references: [id])
+
+  @@index([userId])
+  @@index([auctionId])
+}
+
+// ─── Notification ─────────────────────────────────────────────────────────────
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  auctionId String?
+  title     String
+  message   String
+  type      NotificationType @default(info)
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  auction Auction? @relation(fields: [auctionId], references: [id])
+
+  @@index([userId])
+  @@index([userId, read])
+}
