@@ -417,7 +417,11 @@ export function Navbar() {
                 <div className="pt-4 border-t border-border-base flex flex-col gap-3">
                   {isAuthenticated ? (
                     <>
-                      <div className="flex items-center gap-2.5 py-1 text-text-primary">
+                      <Link
+                        to="/profile"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2.5 py-1 text-text-primary hover:text-primary transition-colors cursor-pointer"
+                      >
                         {user?.avatarUrl ? (
                           <img
                             src={user.avatarUrl}
@@ -432,7 +436,7 @@ export function Navbar() {
                           </div>
                         )}
                         <span className="text-xs font-bold tracking-wider">{user?.name}</span>
-                      </div>
+                      </Link>
 
                       {user?.isAdmin && (
                         <Link

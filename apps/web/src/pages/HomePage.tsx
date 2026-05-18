@@ -46,6 +46,16 @@ export function HomePage() {
   const [searchInput, setSearchInput] = useState('')
   const [page, setPage] = useState(1)
   const [isNavigating, setIsNavigating] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  const limit = isMobile ? 6 : 12
 
   // Scroll to hash on mount (in case navigating from other pages)
   useEffect(() => {
@@ -63,7 +73,7 @@ export function HomePage() {
   const { data, isLoading } = useAuctions({
     status: 'ACTIVE',
     category: activeCategory === 'All' ? undefined : activeCategory.toLowerCase(),
-    limit: 12,
+    limit,
     page,
   })  
 
@@ -299,7 +309,7 @@ export function HomePage() {
             Recently Sold
           </div>
           <div className="relative w-full overflow-hidden">
-            <div className={`flex gap-16 whitespace-nowrap text-[10px] font-mono tracking-widest text-text-secondary ${endedAuctions.length > 0 ? 'animate-marquee' : ''}`}>
+            <div className={`w-max flex shrink-0 gap-16 whitespace-nowrap text-[10px] font-mono tracking-widest text-text-secondary ${endedAuctions.length > 0 ? 'animate-marquee' : ''}`}>
               {endedAuctions.length > 0 ? (
                 <>
                   {endedAuctions.map(auction => (
@@ -470,7 +480,7 @@ export function HomePage() {
       </div>
 
       {/* Pagination */}
-      {data && data.total > 12 && (
+      {data && data.total > limit && (
         <div className="flex items-center justify-center gap-2 mt-8">
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -482,8 +492,8 @@ export function HomePage() {
           </button>
 
           <div className="flex items-center gap-1">
-            {Array.from({ length: Math.ceil(data.total / 12) }, (_, i) => i + 1)
-              .filter((p) => p === 1 || p === Math.ceil(data.total / 12) || Math.abs(p - page) <= 1)
+            {Array.from({ length: Math.ceil(data.total / limit) }, (_, i) => i + 1)
+              .filter((p) => p === 1 || p === Math.ceil(data.total / limit) || Math.abs(p - page) <= 1)
               .reduce<(number | string)[]>((acc, p, idx, arr) => {
                 if (idx > 0 && (arr[idx - 1] as number) + 1 !== p) acc.push('...')
                 acc.push(p)
@@ -509,8 +519,8 @@ export function HomePage() {
           </div>
 
           <button
-            onClick={() => setPage((p) => Math.min(Math.ceil(data.total / 12), p + 1))}
-            disabled={page >= Math.ceil(data.total / 12)}
+            onClick={() => setPage((p) => Math.min(Math.ceil(data.total / limit), p + 1))}
+            disabled={page >= Math.ceil(data.total / limit)}
             className="flex items-center gap-1.5 px-4 py-2 rounded-none border border-border-base text-xs font-bold uppercase tracking-wider text-text-secondary hover:bg-bg-tertiary disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
           >
             Next
