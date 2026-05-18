@@ -160,19 +160,19 @@ export function CreateListingPage() {
               >
                 {i < step ? <Check className="w-3 h-3" /> : i + 1}
               </motion.div>
-              <span className={`text-[10px] uppercase font-bold tracking-wider font-sans hidden md:block ${i === step ? 'text-text-primary' : 'text-text-tertiary'}`}>
+              <span className={`text-[10px] uppercase font-bold tracking-wider font-sans ${i === step ? 'block' : 'hidden md:block'} ${i === step ? 'text-text-primary' : 'text-text-tertiary'}`}>
                 {s}
               </span>
             </div>
             {i < STEPS.length - 1 && (
-              <div className="flex-1 h-px bg-border-base mx-3 animate-pulse" />
+              <div className="flex-1 h-px bg-border-base mx-1 sm:mx-3 animate-pulse" />
             )}
           </div>
         ))}
       </div>
 
       {/* Card */}
-      <div className="bg-bg-surface rounded-none border border-border-base p-8 shadow-sm">
+      <div className="bg-bg-surface rounded-none border border-border-base p-4 sm:p-8 shadow-sm">
         {error && (
           <motion.div
             initial={{ opacity: 0, y: -4 }}
@@ -336,7 +336,7 @@ export function CreateListingPage() {
 
               {/* Image grid */}
               {form.imageUrls.length > 0 && (
-                <div className="grid grid-cols-4 gap-3 pt-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
                   {form.imageUrls.map((url, i) => (
                     <div key={url} className="relative group aspect-square border border-border-base bg-bg-surface">
                       <img src={url} alt="" className="w-full h-full object-cover rounded-none" />
