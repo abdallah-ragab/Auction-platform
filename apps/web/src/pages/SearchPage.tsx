@@ -133,31 +133,31 @@ export function SearchPage() {
                 </div>
 
                 {/* Price Range */}
-                <div className="flex flex-wrap items-center gap-4 bg-bg-tertiary/20 p-4 border border-border-base rounded-none">
-                  <div className="relative">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 bg-bg-tertiary/20 p-4 border border-border-base rounded-none">
+                  <div className="relative w-full sm:w-auto">
                     <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-tertiary text-xs font-mono">$</span>
                     <input
                       type="number"
                       value={minPrice}
                       onChange={(e) => setMinPrice(e.target.value)}
                       placeholder="Min price"
-                      className="w-36 pl-8 pr-3 py-2 rounded-none border border-border-base bg-bg-surface text-xs uppercase tracking-wider text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all font-sans"
+                      className="w-full sm:w-36 pl-8 pr-3 py-2 rounded-none border border-border-base bg-bg-surface text-xs uppercase tracking-wider text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all font-sans"
                     />
                   </div>
-                  <div className="relative">
+                  <div className="relative w-full sm:w-auto">
                     <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-tertiary text-xs font-mono">$</span>
                     <input
                       type="number"
                       value={maxPrice}
                       onChange={(e) => setMaxPrice(e.target.value)}
                       placeholder="Max price"
-                      className="w-36 pl-8 pr-3 py-2 rounded-none border border-border-base bg-bg-surface text-xs uppercase tracking-wider text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all font-sans"
+                      className="w-full sm:w-36 pl-8 pr-3 py-2 rounded-none border border-border-base bg-bg-surface text-xs uppercase tracking-wider text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all font-sans"
                     />
                   </div>
                   {(minPrice || maxPrice || category !== 'All') && (
                     <button
                       onClick={() => { setMinPrice(''); setMaxPrice(''); setCategory('All') }}
-                      className="flex items-center gap-1.5 font-mono text-[10px] tracking-wider text-text-tertiary hover:text-text-primary uppercase transition-all"
+                      className="flex items-center justify-center gap-1.5 font-mono text-[10px] tracking-wider text-text-tertiary hover:text-text-primary uppercase transition-all py-1"
                     >
                       <X className="w-3.5 h-3.5" /> Clear Filters
                     </button>
@@ -177,13 +177,13 @@ export function SearchPage() {
         </p>
 
         {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="h-72 bg-bg-surface rounded-none border border-border-base animate-pulse" />
             ))}
           </div>
         ) : results.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {results.map((auction, i) => (
               <AuctionCard key={auction.id} auction={auction} index={i} />
             ))}

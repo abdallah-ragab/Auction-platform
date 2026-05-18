@@ -150,7 +150,7 @@ export function AdminPage() {
                 <Activity className="w-4 h-4 text-primary animate-pulse" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary font-sans">System Service Status</span>
               </div>
-              <div className="flex items-center gap-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
                 {[
                   { name: 'Database (Postgres)', key: 'postgres' },
                   { name: 'Cache (Redis)', key: 'redis' },
@@ -172,13 +172,13 @@ export function AdminPage() {
 
             {/* Stats grid */}
             {statsLoading ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div key={i} className="h-24 bg-bg-surface rounded-none border border-border-base animate-pulse" />
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 {[
                   {
                     label: 'Bids Placed Today',
@@ -265,7 +265,7 @@ export function AdminPage() {
                   <FlaskConical className="w-4 h-4 text-primary" />
                   <h2 className="text-[10px] font-bold uppercase tracking-widest text-text-primary font-sans">A/B Experiments — Recommendation Engine</h2>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
                     {
                       group: 'Group A (AI Recommendations)',
@@ -497,7 +497,7 @@ export function AdminPage() {
                 ))}
               </div>
             ) : (
-              <div className="bg-bg-surface rounded-none border border-border-base overflow-hidden shadow-sm">
+              <div className="bg-bg-surface rounded-none border border-border-base overflow-x-auto shadow-sm">
                 <table className="w-full text-sm text-left">
                   <thead className="text-[10px] uppercase font-bold tracking-widest bg-bg-tertiary border-b border-border-base text-text-secondary">
                     <tr>
@@ -572,7 +572,7 @@ export function AdminPage() {
                 <p className="text-xs uppercase font-bold tracking-wider text-text-secondary">No Recent Activity</p>
               </div>
             ) : (
-              <div className="bg-bg-surface rounded-none border border-border-base overflow-hidden shadow-sm">
+              <div className="bg-bg-surface rounded-none border border-border-base overflow-x-auto shadow-sm">
                 <table className="w-full text-sm text-left">
                   <thead className="text-[10px] uppercase font-bold tracking-widest bg-bg-tertiary border-b border-border-base text-text-secondary">
                     <tr>

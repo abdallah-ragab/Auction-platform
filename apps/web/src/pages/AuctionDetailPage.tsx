@@ -176,11 +176,11 @@ export function AuctionDetailPage() {
               </div>
               <CountdownTimer endsAt={auction.endsAt} status={auction.status} />
             </div>
-            <div className="flex items-center gap-4 pt-3 border-t border-border-base text-[9px] text-text-tertiary uppercase font-bold tracking-[0.15em] font-sans">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-3 border-t border-border-base text-[9px] text-text-tertiary uppercase font-bold tracking-[0.15em] font-sans">
               <span className="flex items-center gap-1"><Gavel className="w-3.5 h-3.5 text-text-secondary"/> {bidsData?.total ?? 0} Bids Logged</span>
               <span>Opening Price: ${auction.startingPrice.toLocaleString()}</span>
               {auction.reservePrice && (
-                <span className="ml-auto">
+                <span className="ml-0 sm:ml-auto">
                   {auction.currentPrice >= auction.reservePrice ? (
                     <span className="text-primary flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5" /> Reserve Met</span>
                   ) : (
@@ -195,7 +195,7 @@ export function AuctionDetailPage() {
           {isActive ? (
             !isOwner && user ? (
               <div className="space-y-4">
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <div className="relative flex-1">
                     <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-tertiary text-xs font-mono">$</span>
                     <input
@@ -210,7 +210,7 @@ export function AuctionDetailPage() {
                   <button
                     onClick={() => bidMutation.mutate()}
                     disabled={!bidValid || bidMutation.isPending}
-                    className="px-6 py-3 rounded-none bg-primary text-white text-xs uppercase tracking-widest font-semibold hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-2"
+                    className="w-full sm:w-auto px-6 py-3 rounded-none bg-primary text-white text-xs uppercase tracking-widest font-semibold hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center justify-center gap-2"
                   >
                     {bidMutation.isPending ? (
                       <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-none animate-spin" />

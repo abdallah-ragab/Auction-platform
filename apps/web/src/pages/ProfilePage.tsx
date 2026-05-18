@@ -453,7 +453,7 @@ export function ProfilePage() {
             transition={smooth}
           >
             {listingsLoading ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {Array.from({ length: 3 }).map((_, i) => (
                   <div key={i} className="h-72 bg-bg-surface border border-border-base rounded-none animate-pulse" />
                 ))}
@@ -465,7 +465,7 @@ export function ProfilePage() {
                 <Link to="/sell" className="text-[10px] uppercase font-bold tracking-widest text-primary hover:underline mt-2 inline-block">Start selling now</Link>
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {listings.map((auction, i) => (
                   <AuctionCard key={auction.id} auction={auction} index={i} />
                 ))}

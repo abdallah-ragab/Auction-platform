@@ -45,6 +45,18 @@ export function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  // Scroll Lock when Mobile Menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileMenuOpen])
+
   async function handleLogout() {
     try {
       await logout()
@@ -216,6 +228,13 @@ export function Navbar() {
               </AnimatePresence>
             </button>
 
+            {/* Mobile Notification Bell */}
+            {isAuthenticated && (
+              <div className="lg:hidden flex items-center">
+                <NotificationsDropdown />
+              </div>
+            )}
+
             <div className="w-px h-5 bg-border-base mx-0.5" />
 
             {/* Desktop Authed Actions */}
@@ -304,166 +323,177 @@ export function Navbar() {
       {/* Mobile Navigation Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden border-t border-border-base bg-bg-surface overflow-hidden"
-          >
-            <div className="px-4 pt-4 pb-6 space-y-4 font-sans text-xs uppercase tracking-widest font-semibold">
-              
-              {/* Mobile Search */}
-              <form onSubmit={handleSearchSubmit} className="relative flex items-center mb-2">
-                <Search className="absolute left-3 w-4 h-4 text-text-tertiary" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search collections..."
-                  className="w-full pl-10 pr-3 py-2.5 rounded-none border border-border-base bg-bg-tertiary text-text-primary text-xs focus:outline-none focus:border-primary transition-all"
-                />
-              </form>
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 top-16 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+              className="fixed inset-x-0 top-16 z-50 max-h-[calc(100vh-4rem)] overflow-y-auto border-b border-border-base bg-bg-surface lg:hidden shadow-elevated"
+            >
+              <div className="px-4 pt-4 pb-6 space-y-4 font-sans text-xs uppercase tracking-widest font-semibold">
+                
+                {/* Mobile Search */}
+                <form onSubmit={handleSearchSubmit} className="relative flex items-center mb-2">
+                  <Search className="absolute left-3 w-4 h-4 text-text-tertiary" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search collections..."
+                    className="w-full pl-10 pr-3 py-2.5 rounded-none border border-border-base bg-bg-tertiary text-text-primary text-xs focus:outline-none focus:border-primary transition-all"
+                  />
+                </form>
 
-              {/* Direct links */}
-              <Link
-                to="/search"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 border-b border-border-base/50 text-text-secondary hover:text-primary"
-              >
-                Auctions
-              </Link>
-
-              {/* Mobile Collections Sub-Accordion */}
-              <div>
-                <button
-                  onClick={() => setMobileCollectionsOpen(!mobileCollectionsOpen)}
-                  className="w-full flex items-center justify-between py-2 border-b border-border-base/50 text-text-secondary hover:text-primary text-left uppercase text-xs font-semibold tracking-widest"
+                {/* Direct links */}
+                <Link
+                  to="/search"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block py-2 border-b border-border-base/50 text-text-secondary hover:text-primary"
                 >
-                  <span>Collections</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${mobileCollectionsOpen ? 'rotate-180' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {mobileCollectionsOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="overflow-hidden pl-4 py-2 space-y-2.5 bg-bg-tertiary/10 border-l border-border-base mt-1"
-                    >
-                      {CATEGORIES_CONFIG.map((cat) => (
+                  Auctions
+                </Link>
+
+                {/* Mobile Collections Sub-Accordion */}
+                <div>
+                  <button
+                    onClick={() => setMobileCollectionsOpen(!mobileCollectionsOpen)}
+                    className="w-full flex items-center justify-between py-2 border-b border-border-base/50 text-text-secondary hover:text-primary text-left uppercase text-xs font-semibold tracking-widest"
+                  >
+                    <span>Collections</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${mobileCollectionsOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {mobileCollectionsOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden pl-4 py-2 space-y-2.5 bg-bg-tertiary/10 border-l border-border-base mt-1"
+                      >
+                        {CATEGORIES_CONFIG.map((cat) => (
+                          <Link
+                            key={cat.name}
+                            to={cat.path}
+                            onClick={() => {
+                              setMobileMenuOpen(false)
+                              setMobileCollectionsOpen(false)
+                            }}
+                            className="flex items-center gap-2.5 py-1 text-[11px] text-text-secondary hover:text-primary uppercase tracking-widest font-medium"
+                          >
+                            <cat.icon className="w-3.5 h-3.5 text-primary" />
+                            {cat.name}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <a 
+                  href="#provenance" 
+                  onClick={(e) => handleNavClick(e, '#provenance')}
+                  className="block py-2 border-b border-border-base/50 text-text-secondary hover:text-primary"
+                >
+                  Provenance
+                </a>
+                <a 
+                  href="#how-it-works" 
+                  onClick={(e) => handleNavClick(e, '#how-it-works')}
+                  className="block py-2 border-b border-border-base/50 text-text-secondary hover:text-primary"
+                >
+                  How it works
+                </a>
+
+                {/* Actions */}
+                <div className="pt-4 border-t border-border-base flex flex-col gap-3">
+                  {isAuthenticated ? (
+                    <>
+                      <div className="flex items-center gap-2.5 py-1 text-text-primary">
+                        {user?.avatarUrl ? (
+                          <img
+                            src={user.avatarUrl}
+                            alt={user.name}
+                            className="w-6 h-6 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-6 h-6 rounded-full bg-primary-light flex items-center justify-center">
+                            <span className="text-[10px] font-bold text-primary-dark">
+                              {user?.name?.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                        )}
+                        <span className="text-xs font-bold tracking-wider">{user?.name}</span>
+                      </div>
+
+                      {user?.isAdmin && (
                         <Link
-                          key={cat.name}
-                          to={cat.path}
-                          onClick={() => {
-                            setMobileMenuOpen(false)
-                            setMobileCollectionsOpen(false)
-                          }}
-                          className="flex items-center gap-2.5 py-1 text-[11px] text-text-secondary hover:text-primary uppercase tracking-widest font-medium"
+                          to="/admin"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center gap-2 py-2 text-text-secondary hover:text-primary"
                         >
-                          <cat.icon className="w-3.5 h-3.5 text-primary" />
-                          {cat.name}
+                          <Shield className="w-4 h-4" /> Admin Console
                         </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <a 
-                href="#provenance" 
-                onClick={(e) => handleNavClick(e, '#provenance')}
-                className="block py-2 border-b border-border-base/50 text-text-secondary hover:text-primary"
-              >
-                Provenance
-              </a>
-              <a 
-                href="#how-it-works" 
-                onClick={(e) => handleNavClick(e, '#how-it-works')}
-                className="block py-2 border-b border-border-base/50 text-text-secondary hover:text-primary"
-              >
-                How it works
-              </a>
-
-              {/* Actions */}
-              <div className="pt-4 border-t border-border-base flex flex-col gap-3">
-                {isAuthenticated ? (
-                  <>
-                    <div className="flex items-center gap-2.5 py-1 text-text-primary">
-                      {user?.avatarUrl ? (
-                        <img
-                          src={user.avatarUrl}
-                          alt={user.name}
-                          className="w-6 h-6 rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-6 h-6 rounded-full bg-primary-light flex items-center justify-center">
-                          <span className="text-[10px] font-bold text-primary-dark">
-                            {user?.name?.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
                       )}
-                      <span className="text-xs font-bold tracking-wider">{user?.name}</span>
-                    </div>
-
-                    {user?.isAdmin && (
                       <Link
-                        to="/admin"
+                        to="/sell"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2 py-2 text-primary hover:text-primary-dark"
+                      >
+                        <Plus className="w-4 h-4" /> Create Listing
+                      </Link>
+                      <Link
+                        to="/watchlist"
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex items-center gap-2 py-2 text-text-secondary hover:text-primary"
                       >
-                        <Shield className="w-4 h-4" /> Admin Console
+                        <Heart className="w-4 h-4" /> Watchlist
                       </Link>
-                    )}
-                    <Link
-                      to="/sell"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 py-2 text-primary hover:text-primary-dark"
-                    >
-                      <Plus className="w-4 h-4" /> Create Listing
-                    </Link>
-                    <Link
-                      to="/watchlist"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 py-2 text-text-secondary hover:text-primary"
-                    >
-                      <Heart className="w-4 h-4" /> Watchlist
-                    </Link>
-                    <Link
-                      to="/profile"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 py-2 text-text-secondary hover:text-primary"
-                    >
-                      Profile Settings
-                    </Link>
+                      <Link
+                        to="/profile"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2 py-2 text-text-secondary hover:text-primary"
+                      >
+                        Profile Settings
+                      </Link>
 
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center gap-2 py-2 text-red-500 hover:text-red-600 text-left font-bold"
-                    >
-                      <LogOut className="w-4 h-4" /> Log out
-                    </button>
-                  </>
-                ) : (
-                  <div className="flex gap-2 w-full">
-                    <Link
-                      to="/login"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex-1 text-center py-2.5 bg-bg-tertiary text-text-secondary hover:text-primary border border-border-base tracking-widest font-bold"
-                    >
-                      Sign in
-                    </Link>
-                    <Link
-                      to="/register"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex-1 text-center py-2.5 bg-primary text-white hover:bg-primary-dark border border-primary/20 tracking-widest font-bold"
-                    >
-                      Start Bidding
-                    </Link>
-                  </div>
-                )}
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 py-2 text-red-500 hover:text-red-600 text-left font-bold"
+                      >
+                        <LogOut className="w-4 h-4" /> Log out
+                      </button>
+                    </>
+                  ) : (
+                    <div className="flex gap-2 w-full">
+                      <Link
+                        to="/login"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex-1 text-center py-2.5 bg-bg-tertiary text-text-secondary hover:text-primary border border-border-base tracking-widest font-bold"
+                      >
+                        Sign in
+                      </Link>
+                      <Link
+                        to="/register"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex-1 text-center py-2.5 bg-primary text-white hover:bg-primary-dark border border-primary/20 tracking-widest font-bold"
+                      >
+                        Start Bidding
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>

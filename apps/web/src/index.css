@@ -179,3 +179,12 @@ input, textarea, select {
   background: var(--color-primary-light);
   color: var(--color-primary-dark);
 }
+
+/* ─── Custom Utilities ────────────────────────────────────── */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

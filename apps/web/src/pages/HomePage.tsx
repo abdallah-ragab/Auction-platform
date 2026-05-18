@@ -112,7 +112,7 @@ export function HomePage() {
         </div>
         
         <h1 className="font-serif italic text-4xl sm:text-5xl md:text-7xl text-text-primary leading-[1.1] tracking-normal mb-8 block text-center">
-          Where rare things <br /> find their place.
+          Where rare things <br className="hidden md:inline" /> find their place.
         </h1>
         
         <p className="font-sans text-xs md:text-sm text-text-secondary tracking-wide max-w-lg mx-auto mb-10 leading-relaxed font-light">
@@ -248,7 +248,7 @@ export function HomePage() {
           <div className="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-primary/20" />
           <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-primary/20" />
           
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 relative z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 relative z-10">
             {[
               { num: "$14.2M+", ar: "إجمالي التداولات", label: "Curated Acquisitions", desc: "Successful historical global transactions verified by secure escrow." },
               { num: "0ms", ar: "زمن استجابة فوري", label: "Synchronization Latency", desc: "State-of-the-art WebSockets powering rapid micro-second real-time bidding." },
@@ -274,7 +274,7 @@ export function HomePage() {
           </div>
           <h2 className="font-serif italic text-3xl md:text-5xl text-text-primary font-medium">Explore by Department</h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {[
             { name: "Fine Watches", ar: "ساعات فاخرة ورائعة", count: "3 Active Lots", desc: "Archival horology and vintage chronographs of unparalleled lineage.", link: "/search?category=watches" },
             { name: "Vintage Glass", ar: "كاميرات نادرة وأثرية", count: "5 Active Lots", desc: "Rare analog camera equipment, classic rangefinders and premium lenses.", link: "/search?category=cameras" },
@@ -376,8 +376,8 @@ export function HomePage() {
                 desc: "Complete your payment securely and receive your item." 
               }
             ].map((step, i) => (
-              <div key={i} className="relative text-center md:text-left">
-                <div className="text-6xl font-serif italic text-primary/10 absolute -top-8 left-0 md:-left-4 z-0">{step.step}</div>
+              <div key={i} className="relative text-left">
+                <div className="text-6xl font-serif italic text-primary/10 absolute -top-8 -left-2 z-0">{step.step}</div>
                 <div className="relative z-10">
                   <div className="w-12 h-12 rounded-none bg-primary/5 flex items-center justify-center mb-6 border border-primary/10">
                     <step.icon className="w-4 h-4 text-primary" />
@@ -403,7 +403,7 @@ export function HomePage() {
               <span className="text-sm md:text-base text-primary font-bold md:ml-3" style={{ fontFamily: 'Amiri, serif' }}>مختارات بعناية فائقة للأعضاء</span>
             </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {recommendations.slice(0, 4).map((auction, i) => (
               <AuctionCard key={auction.id} auction={auction} index={i} />
             ))}
@@ -444,13 +444,13 @@ export function HomePage() {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="bg-bg-surface rounded-none border border-border-base h-72 animate-pulse" />
             ))}
           </div>
         ) : auctions.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {auctions.map((auction, i) => (
               <AuctionCard key={auction.id} auction={auction} index={i} />
             ))}

@@ -244,7 +244,7 @@ export function CreateListingPage() {
               transition={{ duration: 0.2 }}
               className="space-y-5"
             >
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-text-primary font-sans">Starting Price</label>
                   <div className="relative">
@@ -278,7 +278,7 @@ export function CreateListingPage() {
                   <p className="text-[9px] text-text-tertiary font-sans leading-relaxed">The hidden minimum threshold. If the final bid does not reach this amount, the item will not be sold.</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-text-primary font-sans">Starts At</label>
                   <input
