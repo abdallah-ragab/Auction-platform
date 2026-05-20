@@ -52,6 +52,11 @@ const PORT         = Number(process.env.PORT ?? 3000);
 const FRONTEND_URL = process.env.FRONTEND_URL ?? 'http://localhost:5173';
 const REDIS_URL    = process.env.REDIS_URL ?? 'redis://localhost:6379';
 
+// Support comma-separated lists of domains in FRONTEND_URL
+const allowedOrigins = FRONTEND_URL.includes(',')
+  ? FRONTEND_URL.split(',').map(url => url.trim())
+  : FRONTEND_URL;
+
 // ─── Sentry ───────────────────────────────────────────────────────────────────
 const sentryEnabled = Boolean(process.env.SENTRY_DSN?.length);
 if (sentryEnabled) {
@@ -68,7 +73,7 @@ const server = http.createServer(app);
 // This makes socket broadcasts work correctly across multiple backend processes.
 
 const ioServer = new SocketIOServer(server, {
-  cors: { origin: FRONTEND_URL, methods: ['GET', 'POST'] },
+  cors: { origin: allowedOrigins, methods: ['GET', 'POST'] },
 });
 
 // Two dedicated ioredis clients for the Socket.IO Redis adapter.
@@ -91,7 +96,7 @@ setIO(ioServer);
 
 if (sentryEnabled) Sentry.setupExpressErrorHandler(app);
 app.use(helmet());
-app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(correlationIdMiddleware);
 app.use(morgan('combined', {
   stream: { write: (msg) => logger.http(msg.trim()) },
