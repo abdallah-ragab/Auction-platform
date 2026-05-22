@@ -185,7 +185,7 @@ export function Navbar() {
           </div>
 
           {/* Right side Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             
             {/* Live Indicator (Desktop) */}
             {activeCount > 0 && (
@@ -207,7 +207,7 @@ export function Navbar() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
-                  className="w-28 focus:w-44 pl-8 pr-3 py-1 rounded-full border border-border-base bg-bg-tertiary text-text-primary text-xs focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary focus:bg-bg-surface transition-all duration-300"
+                  className="w-24 focus:w-36 pl-8 pr-3 py-1 rounded-full border border-border-base bg-bg-tertiary text-text-primary text-xs focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary focus:bg-bg-surface transition-all duration-300"
                 />
               </form>
             </div>
@@ -242,27 +242,28 @@ export function Navbar() {
             <div className="w-px h-5 bg-border-base mx-0.5" />
 
             {/* Desktop Authed Actions */}
-            <div className="hidden lg:flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-1">
               {isAuthenticated ? (
                 <>
                   {user?.isAdmin && (
                     <Link
                       to="/admin"
-                      className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider text-text-secondary hover:bg-bg-tertiary transition-colors"
+                      title="Admin Console"
+                      className="p-1.5 rounded-lg text-text-secondary hover:bg-bg-tertiary hover:text-primary transition-colors"
                     >
-                      <Shield className="w-3.5 h-3.5" />
-                      <span>Admin</span>
+                      <Shield className="w-4 h-4" />
                     </Link>
                   )}
                   <Link
                     to="/sell"
-                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider text-primary hover:bg-primary-light transition-colors"
+                    className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider text-primary hover:bg-primary-light transition-colors"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>Sell</span>
                   </Link>
                   <Link
                     to="/watchlist"
+                    title="Watchlist"
                     className="p-1.5 rounded-lg text-text-secondary hover:bg-bg-tertiary transition-colors"
                   >
                     <Heart className="w-4 h-4" />
@@ -270,7 +271,7 @@ export function Navbar() {
                   <NotificationsDropdown />
                   <Link
                     to="/profile"
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-text-secondary hover:bg-bg-tertiary transition-colors"
+                    className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold text-text-secondary hover:bg-bg-tertiary transition-colors"
                   >
                     {user?.avatarUrl ? (
                       <img
@@ -285,10 +286,11 @@ export function Navbar() {
                         </span>
                       </div>
                     )}
-                    <span>{user?.name?.split(' ')[0]}</span>
+                    <span className="max-w-[60px] truncate">{user?.name?.split(' ')[0]}</span>
                   </Link>
                   <button
                     onClick={handleLogout}
+                    title="Sign out"
                     className="p-1.5 rounded-lg text-text-tertiary hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
@@ -304,7 +306,7 @@ export function Navbar() {
                   </Link>
                   <Link
                     to="/register"
-                    className="px-4 py-2.5 rounded-none border border-primary/30 text-xs font-bold uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all duration-300"
+                    className="px-3 py-2 rounded-none border border-primary/30 text-xs font-bold uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all duration-300"
                   >
                     Start bidding
                   </Link>
