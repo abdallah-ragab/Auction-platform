@@ -100,7 +100,11 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <Link to="/" className="flex items-baseline gap-2 group shrink-0 select-none">
+          <Link
+            to="/"
+            onClick={() => { if (window.location.pathname === '/') window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+            className="flex items-baseline gap-2 group shrink-0 select-none"
+          >
             <span className="font-serif italic text-2xl font-bold tracking-tight text-text-primary transition-colors group-hover:text-primary">
               BidSpace
             </span>
