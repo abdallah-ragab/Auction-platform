@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { 
-  Search, TrendingUp, Shield, Zap, ChevronRight, ChevronLeft, Star, Gavel, Package, 
+import {
+  Search, TrendingUp, Shield, Zap, ChevronRight, ChevronLeft, Star, Gavel, Package,
   UserPlus, MousePointer2, Trophy, Clock, Globe, ArrowRight, ShieldCheck, Loader2
 } from 'lucide-react'
 import { useAuctions, useRecommendations } from '@/hooks/useAuctions'
@@ -76,7 +76,7 @@ export function HomePage() {
     category: activeCategory === 'All' ? undefined : activeCategory.toLowerCase(),
     limit,
     page,
-  })  
+  })
 
   const { data: endedAuctionsData } = useAuctions({
     status: 'ENDED',
@@ -91,7 +91,7 @@ export function HomePage() {
 
   // Featured Lot logic - Pulls live first active auction or falls back to Leica M3 rangefinder mockup
   const featured = auctions[0]
-  
+
   const fallbackFeatured = {
     id: "0047",
     title: "Leica M3 \"Double Stroke\"",
@@ -121,11 +121,11 @@ export function HomePage() {
         <div className="font-sans text-[10px] md:text-xs tracking-[0.25em] uppercase text-text-tertiary flex items-center justify-center gap-1.5 mb-4">
           <span>◆</span> Cairo, Egypt <span>•</span> EST. 2026 <span>•</span> MENA'S RARE AUCTION HOUSE
         </div>
-        
+
         <h1 className="font-serif italic text-4xl sm:text-5xl md:text-7xl text-text-primary leading-[1.1] tracking-normal mb-8 block text-center">
           Where rare things <br className="hidden md:inline" /> find their place.
         </h1>
-        
+
         <p className="font-sans text-xs md:text-sm text-text-secondary tracking-wide max-w-lg mx-auto mb-10 leading-relaxed font-light">
           A curated digital sanctuary for objects of historical significance and enduring value.
         </p>
@@ -168,7 +168,7 @@ export function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden rounded-none border border-border-base bg-bg-surface shadow-sm relative group">
           {/* Subtle gold brand border indicator */}
           <div className="absolute top-0 left-0 w-full h-[4px] bg-primary/95" />
-          
+
           {/* Left - Image Container */}
           <div className="lg:col-span-7 relative aspect-[4/3] lg:aspect-auto min-h-[320px] lg:h-[500px] bg-bg-tertiary overflow-hidden border-b lg:border-b-0 lg:border-r border-border-base">
             {/* Egyptian Border Motif Accent overlay */}
@@ -176,7 +176,7 @@ export function HomePage() {
             <div className="absolute top-4 right-4 w-4 h-4 border-t border-r border-white/40 z-10 pointer-events-none" />
             <div className="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-white/40 z-10 pointer-events-none" />
             <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-white/40 z-10 pointer-events-none" />
-            
+
             <img
               src={featuredImage}
               alt={featuredTitle}
@@ -252,13 +252,13 @@ export function HomePage() {
       <section className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="bg-bg-surface border border-border-base p-8 md:p-12 relative overflow-hidden shadow-sm">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(36,91,69,0.06),transparent)] pointer-events-none" />
-          
+
           {/* Subtle Arabesque Motif corners */}
           <div className="absolute top-3 left-3 w-4 h-4 border-t border-l border-primary/20" />
           <div className="absolute top-3 right-3 w-4 h-4 border-t border-r border-primary/20" />
           <div className="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-primary/20" />
           <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-primary/20" />
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 relative z-10">
             {[
               { num: "$14.2M+", ar: "إجمالي التداولات", label: "Curated Acquisitions", desc: "Successful historical global transactions verified by secure escrow." },
@@ -331,19 +331,19 @@ export function HomePage() {
       {/* Features Grid */}
       <section id="provenance" className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 max-w-7xl mx-auto scroll-mt-20">
         {[
-          { 
-            icon: ShieldCheck, 
-            title: "AI-Secured Bidding", 
+          {
+            icon: ShieldCheck,
+            title: "AI-Secured Bidding",
             desc: "Our neural networks detect and block fraudulent bidding patterns in real-time."
           },
-          { 
-            icon: Globe, 
-            title: "Global Authenticity", 
+          {
+            icon: Globe,
+            title: "Global Authenticity",
             desc: "Every listing is verified by our network of category experts across the globe."
           },
-          { 
-            icon: Clock, 
-            title: "Live Synchronization", 
+          {
+            icon: Clock,
+            title: "Live Synchronization",
             desc: "Experience zero-latency bidding with our real-time synchronization engine."
           }
         ].map((feat, i) => (
@@ -359,48 +359,48 @@ export function HomePage() {
 
       {/* How it Works Section */}
       <section id="how-it-works" className="px-4 max-w-7xl mx-auto scroll-mt-20">
-      <div className="bg-bg-surface border border-border-base rounded-none p-12 md:p-20 relative">
-        <div className="relative z-10">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="font-serif italic text-3xl md:text-5xl text-text-primary mb-4 font-medium">Master the Auction</h2>
-            <p className="text-text-secondary text-[10px] uppercase tracking-[0.2em] font-semibold">Join thousands of collectors in three simple steps.</p>
-          </div>
+        <div className="bg-bg-surface border border-border-base rounded-none p-12 md:p-20 relative">
+          <div className="relative z-10">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <h2 className="font-serif italic text-3xl md:text-5xl text-text-primary mb-4 font-medium">Master the Auction</h2>
+              <p className="text-text-secondary text-[10px] uppercase tracking-[0.2em] font-semibold">Join thousands of collectors in three simple steps.</p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {[
-              { 
-                icon: UserPlus, 
-                step: "01", 
-                title: "Create Account", 
-                desc: "Join the community and get verified to start your journey." 
-              },
-              { 
-                icon: MousePointer2, 
-                step: "02", 
-                title: "Place Bids", 
-                desc: "Find your treasure and use our real-time engine to stay ahead." 
-              },
-              { 
-                icon: Trophy, 
-                step: "03", 
-                title: "Win & Collect", 
-                desc: "Complete your payment securely and receive your item." 
-              }
-            ].map((step, i) => (
-              <div key={i} className="relative text-left">
-                <div className="text-6xl font-serif italic text-primary/10 absolute -top-8 -left-2 z-0">{step.step}</div>
-                <div className="relative z-10">
-                  <div className="w-12 h-12 rounded-none bg-primary/5 flex items-center justify-center mb-6 border border-primary/10">
-                    <step.icon className="w-4 h-4 text-primary" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              {[
+                {
+                  icon: UserPlus,
+                  step: "01",
+                  title: "Create Account",
+                  desc: "Join the community and get verified to start your journey."
+                },
+                {
+                  icon: MousePointer2,
+                  step: "02",
+                  title: "Place Bids",
+                  desc: "Find your treasure and use our real-time engine to stay ahead."
+                },
+                {
+                  icon: Trophy,
+                  step: "03",
+                  title: "Win & Collect",
+                  desc: "Complete your payment securely and receive your item."
+                }
+              ].map((step, i) => (
+                <div key={i} className="relative text-left">
+                  <div className="text-6xl font-serif italic text-primary/10 absolute -top-8 -left-2 z-0">{step.step}</div>
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-none bg-primary/5 flex items-center justify-center mb-6 border border-primary/10">
+                      <step.icon className="w-4 h-4 text-primary" />
+                    </div>
+                    <h3 className="font-serif italic text-xl text-text-primary mb-3 font-medium">{step.title}</h3>
+                    <p className="text-text-primary text-xs font-medium tracking-wide leading-relaxed">{step.desc}</p>
                   </div>
-                  <h3 className="font-serif italic text-xl text-text-primary mb-3 font-medium">{step.title}</h3>
-                  <p className="text-text-primary text-xs font-medium tracking-wide leading-relaxed">{step.desc}</p>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
       </section>
 
       <RecommendedList recommendations={recommendations || []} />
@@ -417,12 +417,11 @@ export function HomePage() {
                   onClick={() => {
                     setActiveCategory(cat)
                     setPage(1)
-                  }}  
-                  className={`shrink-0 px-4 py-1.5 rounded-none text-xs font-bold uppercase tracking-wider transition-all border ${
-                    activeCategory === cat
+                  }}
+                  className={`shrink-0 px-4 py-1.5 rounded-none text-xs font-bold uppercase tracking-wider transition-all border ${activeCategory === cat
                       ? 'bg-primary border-primary text-white'
                       : 'bg-bg-surface border-border-base text-text-secondary hover:border-text-secondary'
-                  }`}
+                    }`}
                 >
                   {cat}
                 </button>
@@ -490,11 +489,10 @@ export function HomePage() {
                   <button
                     key={p}
                     onClick={() => setPage(p as number)}
-                    className={`w-9 h-9 rounded-none text-xs font-bold transition-all ${
-                      page === p
+                    className={`w-9 h-9 rounded-none text-xs font-bold transition-all ${page === p
                         ? 'bg-primary border border-primary text-white'
                         : 'text-text-secondary hover:bg-bg-tertiary border border-border-base'
-                    }`}
+                      }`}
                   >
                     {p}
                   </button>
@@ -521,43 +519,43 @@ export function HomePage() {
 
       {/* Redesigned Premium CTA */}
       <section className="px-4 max-w-7xl mx-auto">
-      <div className="relative rounded-none overflow-hidden border-2 border-primary/20 bg-bg-surface p-12 md:p-24 text-center shadow-lg group">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-        
-        {/* Egyptian Geometric Motif Accent Corners */}
-        <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-primary/30" />
-        <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-primary/30" />
-        <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-primary/30" />
-        <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-primary/30" />
-        
-        <div className="relative z-10 max-w-3xl mx-auto space-y-6">
-          <div className="font-sans text-[10px] md:text-xs tracking-[0.3em] uppercase text-primary/80 font-bold">
-            ◆ Provenance & Partnership ◆
-          </div>
-          
-          <h2 className="font-serif italic text-3xl md:text-5xl text-text-primary leading-tight font-medium">
-            Possess an Object of Distinction?
-          </h2>
-          
-          {/* Beautiful Arabic Elegant Accent */}
-          <div className="font-serif text-3xl md:text-4xl text-primary font-bold select-none my-5 tracking-wide leading-relaxed" style={{ fontFamily: 'Amiri, serif' }}>
-            هل تمتلك قطعة نادرة ذات قيمة تاريخية؟
-          </div>
-          
-          <p className="text-text-secondary text-xs md:text-sm tracking-wide leading-relaxed max-w-lg mx-auto font-light">
-            Entrust your masterpieces to MENA's premier curated digital auction house. Connect directly with verified global collectors, supported by real-time neural fraud protection and zero-latency transaction verification.
-          </p>
-          
-          <div className="pt-6">
-            <Link 
-              to="/sell"
-              className="relative inline-flex items-center justify-center px-10 py-4 bg-primary text-white text-xs uppercase tracking-widest font-bold hover:bg-primary-dark transition-all duration-300 shadow-md group-hover:scale-[1.01]"
-            >
-              Consign Your Collection
-            </Link>
+        <div className="relative rounded-none overflow-hidden border-2 border-primary/20 bg-bg-surface p-12 md:p-24 text-center shadow-lg group">
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+
+          {/* Egyptian Geometric Motif Accent Corners */}
+          <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-primary/30" />
+          <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-primary/30" />
+          <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-primary/30" />
+          <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-primary/30" />
+
+          <div className="relative z-10 max-w-3xl mx-auto space-y-6">
+            <div className="font-sans text-[10px] md:text-xs tracking-[0.3em] uppercase text-primary/80 font-bold">
+              ◆ Provenance & Partnership ◆
+            </div>
+
+            <h2 className="font-serif italic text-3xl md:text-5xl text-text-primary leading-tight font-medium">
+              Possess an Object of Distinction?
+            </h2>
+
+            {/* Beautiful Arabic Elegant Accent */}
+            <div className="font-serif text-3xl md:text-4xl text-primary font-bold select-none my-5 tracking-wide leading-relaxed" style={{ fontFamily: 'Amiri, serif' }}>
+              هل تمتلك قطعة نادرة ذات قيمة تاريخية؟
+            </div>
+
+            <p className="text-text-secondary text-xs md:text-sm tracking-wide leading-relaxed max-w-lg mx-auto font-light">
+              Entrust your masterpieces to MENA's premier curated digital auction house. Connect directly with verified global collectors, supported by real-time neural fraud protection and zero-latency transaction verification.
+            </p>
+
+            <div className="pt-6">
+              <Link
+                to="/sell"
+                className="relative inline-flex items-center justify-center px-10 py-4 bg-primary text-white text-xs uppercase tracking-widest font-bold hover:bg-primary-dark transition-all duration-300 shadow-md group-hover:scale-[1.01]"
+              >
+                Consign Your Collection
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
       </section>
 
     </div>
