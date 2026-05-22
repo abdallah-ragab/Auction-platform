@@ -4,6 +4,7 @@ import {
   EVENTS, SOCKET_EVENTS, SOCKET_ROOMS,
   BidPlacedPayload, BidFlaggedPayload, AuctionEndedPayload,
   AuctionCreatedPayload, PaymentSucceededPayload, UserRegisteredPayload,
+  AuctionExtendedSocketPayload,
 } from '@auction/shared-events';
 import { getIO } from '../utils/socket';
 import { prisma } from '../lib/prisma';
@@ -49,10 +50,11 @@ async function onBidPlaced(payload: BidPlacedPayload): Promise<void> {
         select: { endsAt: true }
       });
       if (auction) {
-        io.to(room).emit(SOCKET_EVENTS.AUCTION_EXTENDED, {
+        const extendedPayload: AuctionExtendedSocketPayload = {
           auctionId: payload.auctionId,
           newEndsAt: auction.endsAt.toISOString(),
-        });
+        };
+        io.to(room).emit(SOCKET_EVENTS.AUCTION_EXTENDED, extendedPayload);
       }
     }
 

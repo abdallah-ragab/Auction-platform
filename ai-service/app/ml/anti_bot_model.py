@@ -10,6 +10,7 @@ DO NOT change the function signatures — the router imports them.
 import os
 import pickle
 from app.models.schemas import AntiBotRequest, AntiBotResponse
+from app.config import settings
 
 ready = False
 _model = None
@@ -20,7 +21,7 @@ def load() -> None:
     global ready, _model
 
     artifact_path = os.path.join(
-        os.getenv("MODEL_ARTIFACTS_PATH", "app/ml/artifacts"),
+        settings.MODEL_ARTIFACTS_PATH,
         "anti_bot_v1.pkl",
     )
 
@@ -57,7 +58,7 @@ def predict(payload: AntiBotRequest) -> AntiBotResponse:
     #     payload.session_duration_seconds,
     # ]
     # confidence = float(_model.predict_proba([features])[0][1])
-    # is_bot = confidence > 0.7
+    # is_bot = confidence > settings.BOT_DETECTED_THRESHOLD
     # return AntiBotResponse(
     #     is_bot=is_bot,
     #     confidence=confidence,

@@ -11,6 +11,7 @@ Phase 2: Real cosine similarity against pgvector embeddings.
 
 import asyncio
 from app.models.schemas import RecommendRequest, RecommendResponse, RecommendItem
+from app.config import settings
 
 recommender_ready = False
 _model = None
@@ -24,9 +25,7 @@ async def load_in_background() -> None:
     global recommender_ready, _model
 
     try:
-        model_name = __import__('os').getenv(
-            "SENTENCE_TRANSFORMER_MODEL", "all-MiniLM-L6-v2"
-        )
+        model_name = settings.SENTENCE_TRANSFORMER_MODEL
         print(f"[recommender] Loading {model_name} in background...")
 
         # Run the slow import in a thread so the event loop stays free

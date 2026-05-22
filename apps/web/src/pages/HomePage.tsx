@@ -119,7 +119,7 @@ export function HomePage() {
       {/* Hero Header Section */}
       <section className="text-center pt-8 max-w-5xl mx-auto px-4">
         <div className="font-sans text-[10px] md:text-xs tracking-[0.25em] uppercase text-text-tertiary flex items-center justify-center gap-1.5 mb-4">
-          <span>◆</span> Cairo, Egypt <span>•</span> EST. 2024 <span>•</span> MENA'S RARE AUCTION HOUSE
+          <span>◆</span> Cairo, Egypt <span>•</span> EST. 2026 <span>•</span> MENA'S RARE AUCTION HOUSE
         </div>
         
         <h1 className="font-serif italic text-4xl sm:text-5xl md:text-7xl text-text-primary leading-[1.1] tracking-normal mb-8 block text-center">

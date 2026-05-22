@@ -49,9 +49,11 @@ pnpm install
 
 # 3. Create Local Environment Configuration Files
 # On Windows (PowerShell):
+copy .env.example .env
 copy backend\.env.example backend\.env
 copy ai-service\.env.example ai-service\.env
 # On Mac/Linux:
+cp .env.example .env
 cp backend/.env.example backend/.env
 cp ai-service/.env.example ai-service/.env
 
@@ -71,6 +73,12 @@ DATABASE_URL="postgresql://user:pass@localhost:5432/auction_db" pnpm seed
 
 # 7. Setup Python AI Virtual Environment & Dependencies (Only if running AI locally)
 cd ai-service
+python -m venv venv
+# On Windows (PowerShell):
+.\venv\Scripts\activate
+# On Mac/Linux:
+source venv/bin/activate
+
 pip install "numpy<2"
 pip install -r requirements.txt
 ```
@@ -108,6 +116,7 @@ If you prefer running services directly on your host machine to get hot reloadin
 3. **Terminal 3: Start FastAPI Neural AI Service (from Host)**
    ```bash
    cd ai-service
+   # Ensure your virtual environment is activated here!
    uvicorn app.main:app --reload --port 8000
    ```
 4. **Terminal 4: Start React 19 Frontend Web App**

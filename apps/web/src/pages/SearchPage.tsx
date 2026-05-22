@@ -11,20 +11,36 @@ export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [query, setQuery] = useState(searchParams.get('q') ?? '')
   const [category, setCategory] = useState('All')
-  const [minPrice, setMinPrice] = useState('')
-  const [maxPrice, setMaxPrice] = useState('')
-  const [debouncedMinPrice, setDebouncedMinPrice] = useState('')
-  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState('')
+  const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') ?? '')
+  const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') ?? '')
+  const [debouncedMinPrice, setDebouncedMinPrice] = useState(searchParams.get('minPrice') ?? '')
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(searchParams.get('maxPrice') ?? '')
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedMinPrice(minPrice), 400)
+    const timer = setTimeout(() => {
+      setDebouncedMinPrice(minPrice)
+      setSearchParams(prev => {
+        const next = new URLSearchParams(prev)
+        if (minPrice) next.set('minPrice', minPrice)
+        else next.delete('minPrice')
+        return next
+      }, { replace: true })
+    }, 400)
     return () => clearTimeout(timer)
-  }, [minPrice])
+  }, [minPrice, setSearchParams])
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedMaxPrice(maxPrice), 400)
+    const timer = setTimeout(() => {
+      setDebouncedMaxPrice(maxPrice)
+      setSearchParams(prev => {
+        const next = new URLSearchParams(prev)
+        if (maxPrice) next.set('maxPrice', maxPrice)
+        else next.delete('maxPrice')
+        return next
+      }, { replace: true })
+    }, 400)
     return () => clearTimeout(timer)
-  }, [maxPrice])
+  }, [maxPrice, setSearchParams])
 
   const [showFilters, setShowFilters] = useState(false)
   const [submitted, setSubmitted] = useState(searchParams.get('q') ?? '')
@@ -54,18 +70,26 @@ export function SearchPage() {
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
     setSubmitted(query)
-    const newParams: Record<string, string> = {}
-    if (query) newParams.q = query
-    if (category !== 'All') newParams.category = category.toLowerCase()
-    setSearchParams(newParams)
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev)
+      if (query) next.set('q', query)
+      else next.delete('q')
+      if (category !== 'All') next.set('category', category.toLowerCase())
+      else next.delete('category')
+      return next
+    })
   }
 
   const handleCategoryChange = (cat: string) => {
     setCategory(cat)
-    const newParams: Record<string, string> = {}
-    if (query) newParams.q = query
-    if (cat !== 'All') newParams.category = cat.toLowerCase()
-    setSearchParams(newParams)
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev)
+      if (query) next.set('q', query)
+      else next.delete('q')
+      if (cat !== 'All') next.set('category', cat.toLowerCase())
+      else next.delete('category')
+      return next
+    })
   }
 
   const results = data?.results ?? []
@@ -156,7 +180,7 @@ export function SearchPage() {
                   </div>
                   {(minPrice || maxPrice || category !== 'All') && (
                     <button
-                      onClick={() => { setMinPrice(''); setMaxPrice(''); setCategory('All') }}
+                      onClick={() => { setMinPrice(''); setMaxPrice(''); handleCategoryChange('All'); }}
                       className="flex items-center justify-center gap-1.5 font-mono text-[10px] tracking-wider text-text-tertiary hover:text-text-primary uppercase transition-all py-1"
                     >
                       <X className="w-3.5 h-3.5" /> Clear Filters

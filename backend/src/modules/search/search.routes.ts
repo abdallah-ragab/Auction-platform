@@ -101,8 +101,11 @@ searchRouter.get('/', validate({ query: SearchQuerySchema }), async (req: Reques
           FROM "Auction"
           WHERE "status"   = 'ACTIVE'
             AND "deletedAt" IS NULL
-            AND to_tsvector('english', "title" || ' ' || "description")
-                @@ plainto_tsquery('english', ${term})
+            AND (
+              to_tsvector('english', "title" || ' ' || "description") @@ plainto_tsquery('english', ${term})
+              OR "title" ILIKE ${'%' + term + '%'}
+              OR "description" ILIKE ${'%' + term + '%'}
+            )
             ${categoryFilter}
             ${minFilter}
             ${maxFilter}
@@ -115,8 +118,11 @@ searchRouter.get('/', validate({ query: SearchQuerySchema }), async (req: Reques
           FROM "Auction"
           WHERE "status"   = 'ACTIVE'
             AND "deletedAt" IS NULL
-            AND to_tsvector('english', "title" || ' ' || "description")
-                @@ plainto_tsquery('english', ${term})
+            AND (
+              to_tsvector('english', "title" || ' ' || "description") @@ plainto_tsquery('english', ${term})
+              OR "title" ILIKE ${'%' + term + '%'}
+              OR "description" ILIKE ${'%' + term + '%'}
+            )
             ${categoryFilter}
             ${minFilter}
             ${maxFilter}

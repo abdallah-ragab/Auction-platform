@@ -8,6 +8,7 @@ Phase 2: Replace predict() body with real Isolation Forest inference.
 import os
 import pickle
 from app.models.schemas import FraudRequest, FraudResponse
+from app.config import settings
 
 ready = False
 _model = None
@@ -18,7 +19,7 @@ def load() -> None:
     global ready, _model
 
     artifact_path = os.path.join(
-        os.getenv("MODEL_ARTIFACTS_PATH", "app/ml/artifacts"),
+        settings.MODEL_ARTIFACTS_PATH,
         "fraud_v1.pkl",
     )
 
@@ -67,7 +68,7 @@ def predict(payload: FraudRequest) -> FraudResponse:
     # # Isolation Forest: negative = anomalous. Normalise to 0–1.
     # score = float(max(0.0, min(1.0, -raw_score)))
     # signals = _build_signals(payload, score)
-    # return FraudResponse(flagged=score > 0.7, score=score, signals=signals)
+    # return FraudResponse(flagged=score > settings.FRAUD_FLAGGED_THRESHOLD, score=score, signals=signals)
     return FraudResponse(flagged=False, score=0.0, signals=[])
 
 
@@ -77,6 +78,6 @@ def _build_signals(payload: FraudRequest, score: float) -> list[str]:
         signals.append("new_account")
     if payload.bid_velocity_1h > 10:
         signals.append("high_velocity")
-    if score > 0.7:
+    if score > settings.FRAUD_FLAGGED_THRESHOLD:
         signals.append("anomalous_amount")
     return signals
