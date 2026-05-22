@@ -23,7 +23,6 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     }
 
     const socket = io(SOCKET_URL, {
-      transports: ['websocket', 'polling'],
       reconnectionAttempts: 10,
       reconnectionDelay: 1000,
       forceNew: true,
