@@ -105,18 +105,7 @@ app.use(morgan('combined', {
 // Raw body for Stripe webhooks MUST come before express.json()
 app.use('/payments/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
-app.use((req, res, next) => {
-  if (req.url.includes('media')) {
-    console.log('--- MEDIA REQ ---', {
-      url: req.url,
-      method: req.method,
-      headers: req.headers['content-type'],
-      body: req.body,
-      file: (req as any).file ? 'exists' : 'missing'
-    });
-  }
-  next();
-});
+
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 

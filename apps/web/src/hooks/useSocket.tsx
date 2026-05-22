@@ -3,6 +3,7 @@ import { useSocketStore } from '@/store/socketStore'
 import { useQueryClient } from '@tanstack/react-query'
 import type { Bid } from '@/api/auctions'
 import toast from 'react-hot-toast'
+import { NotificationToast } from '@/components/notifications/NotificationToast'
 import { useAuthStore } from '@/store/authStore'
 
 type BidNewPayload = {
@@ -65,14 +66,25 @@ export function useAuctionSocket(auctionId: string) {
       })
 
       if (payload.timeExtended) {
-        toast('⏱ Auction extended by 2 minutes — snipe detected!', {
-          duration: 5000,
-          style: { background: '#FAEEDA', color: '#854F0B', border: '1px solid #FAC775' },
-        })
+        toast.custom((t) => (
+          <NotificationToast
+            t={t}
+            title="Auction Extended"
+            message="⏱ Auction extended by 2 minutes — snipe detected!"
+            type="warning"
+          />
+        ), { duration: 5000 })
       }
 
       if (payload.bid.bidderId !== user?.id) {
-        toast(`New bid: $${payload.newHighestBid.toLocaleString()}`, { duration: 3000 })
+        toast.custom((t) => (
+          <NotificationToast
+            t={t}
+            title="New bid placed"
+            message={`$${payload.newHighestBid.toLocaleString()}`}
+            type="info"
+          />
+        ), { duration: 3000 })
       }
     }
 
@@ -82,9 +94,23 @@ export function useAuctionSocket(auctionId: string) {
         return { ...old, status: 'ENDED', winnerId: payload.winnerId }
       })
       if (payload.winnerId === user?.id) {
-        toast.success(`🎉 You won! Final price: $${payload.finalPrice.toLocaleString()}`, { duration: 8000 })
+        toast.custom((t) => (
+          <NotificationToast
+            t={t}
+            title="You won!"
+            message={`🎉 Final price: $${payload.finalPrice.toLocaleString()}`}
+            type="success"
+          />
+        ), { duration: 8000 })
       } else {
-        toast(`Auction ended. Final price: $${payload.finalPrice.toLocaleString()}`, { duration: 5000 })
+        toast.custom((t) => (
+          <NotificationToast
+            t={t}
+            title="Auction ended"
+            message={`Final price: $${payload.finalPrice.toLocaleString()}`}
+            type="info"
+          />
+        ), { duration: 5000 })
       }
     }
 

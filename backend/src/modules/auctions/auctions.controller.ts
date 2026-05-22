@@ -47,7 +47,6 @@ export async function remove(req: Request, res: Response, next: NextFunction) {
 // Uses req.user.sub — never a URL param — so one user cannot fetch another's recommendations
 export async function getRecommendations(req: Request, res: Response, next: NextFunction) {
   try {
-    console.log('--- RECOMMENDATIONS REQ ---', { user: req.user?.sub });
     const recommendations = await auctionsService.getRecommendations(req.user?.sub);
     res.json({ recommendations });
   } catch (err) { next(err); }

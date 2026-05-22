@@ -68,7 +68,7 @@ const errorConfig = {
   },
 }
 
-export function FraudModal({ error, onClose }: Props) {
+export function FraudAlert({ error, onClose }: Props) {
   if (!error) return null
 
   const config = errorConfig[error.error] ?? errorConfig.fraud_flagged

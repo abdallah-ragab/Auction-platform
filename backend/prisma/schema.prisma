@@ -84,7 +84,7 @@ model Auction {
   createdAt     DateTime      @default(now())
   deletedAt     DateTime?
   // embedding: re-enable in Phase 2 when pgvector is added back
-  // embedding  Unsupported("vector(384)")?
+  embedding  Unsupported("vector(384)")?
 
   winnerId  String?
   seller    User            @relation(name: "AuctionSeller", fields: [sellerId], references: [id])

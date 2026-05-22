@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Mail, Lock, User, Phone, Loader2, Check } from 'lucide-react'
+import { Mail, Lock, User, Phone, Loader2, Check, ArrowLeft } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { register } from '@/api/auth'
 import { getErrorMessage } from '@/api/client'
@@ -53,7 +53,16 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-bg-base transition-colors">
+    <div className="relative min-h-[85vh] flex items-center justify-center px-4 py-12 bg-bg-base transition-colors">
+      <div className="absolute top-6 left-6">
+        <Link
+          to="/"
+          className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-text-secondary hover:text-text-primary transition-colors"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          Back to Home
+        </Link>
+      </div>
       <motion.div
         variants={fadeUp}
         initial="initial"

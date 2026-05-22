@@ -7,6 +7,7 @@ import * as c from './auctions.controller';
 export const auctionsRouter = Router();
 
 auctionsRouter.get('/recommendations', optionalAuth,                            c.getRecommendations);
+auctionsRouter.get('/recommendations/:userId', optionalAuth,                    c.getRecommendations);
 auctionsRouter.get('/',                        validate({ query: AuctionQuerySchema }), c.list);
 auctionsRouter.get('/:id',                     c.getOne);
 auctionsRouter.get('/:id/bids',                validate({ query: BidQuerySchema }),     c.getBids);

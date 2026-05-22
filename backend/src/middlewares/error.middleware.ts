@@ -32,14 +32,6 @@ export function errorMiddleware(
   res:  Response,
   _next: NextFunction,
 ): void {
-  console.log('--- ERROR ---', { 
-    url: req.url, 
-    method: req.method, 
-    code: err.code, 
-    status: err.statusCode || err.status,
-    message: err.message,
-    data: err.data 
-  });
   if (err instanceof AppError) {
     res.status(err.statusCode).json({
       error:   err.code,
@@ -54,7 +46,6 @@ export function errorMiddleware(
   res.status(500).json({
     error: 'internal_error',
     message: err.message || 'Internal server error',
-    stack: err.stack,
     correlationId: (req as any).correlationId,
   });
 }

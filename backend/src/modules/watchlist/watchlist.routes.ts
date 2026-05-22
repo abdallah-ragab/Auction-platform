@@ -52,7 +52,7 @@ watchlistRouter.post('/:id', requireAuth, async (req: Request, res: Response, ne
       update: {},
     });
 
-    res.status(201).json({ item });
+    res.status(201).json({ success: true });
   } catch (err) { next(err); }
 });
 

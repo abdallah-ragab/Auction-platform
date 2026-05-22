@@ -43,6 +43,19 @@ async function onBidPlaced(payload: BidPlacedPayload): Promise<void> {
       timeExtended:  payload.timeExtended,
     });
 
+    if (payload.timeExtended) {
+      const auction = await prisma.auction.findUnique({
+        where: { id: payload.auctionId },
+        select: { endsAt: true }
+      });
+      if (auction) {
+        io.to(room).emit(SOCKET_EVENTS.AUCTION_EXTENDED, {
+          auctionId: payload.auctionId,
+          newEndsAt: auction.endsAt.toISOString(),
+        });
+      }
+    }
+
     // Find the previous top bidder so we can notify them they've been outbid
     const previousTop = await prisma.bid.findFirst({
       where:   { auctionId: payload.auctionId, userId: { not: payload.userId } },

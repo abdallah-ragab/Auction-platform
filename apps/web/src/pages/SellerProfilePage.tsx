@@ -72,8 +72,12 @@ export function SellerProfilePage() {
         className="bg-bg-surface border border-border-base p-8 rounded-none shadow-sm flex flex-col md:flex-row items-start justify-between gap-8"
       >
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
-          <div className="w-24 h-24 bg-primary-light text-primary flex items-center justify-center rounded-none border border-primary/20 text-4xl font-serif italic shadow-sm shrink-0">
-            {seller.name.charAt(0).toUpperCase()}
+          <div className="w-24 h-24 bg-primary-light text-primary flex items-center justify-center rounded-none border border-primary/20 text-4xl font-serif italic shadow-sm shrink-0 overflow-hidden">
+            {seller.avatarUrl ? (
+              <img src={seller.avatarUrl} alt={seller.name} className="w-full h-full object-cover" />
+            ) : (
+              seller.name.charAt(0).toUpperCase()
+            )}
           </div>
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2.5 justify-center sm:justify-start">

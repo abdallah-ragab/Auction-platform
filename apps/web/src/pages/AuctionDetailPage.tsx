@@ -6,16 +6,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuction, useAuctionBids } from '@/hooks/useAuctions'
 import { useAuctionSocket } from '@/hooks/useSocket'
 import { CountdownTimer } from '@/components/auction/CountdownTimer'
-import { FraudModal } from '@/components/bid/FraudModal'
-import { placeBid } from '@/api/bids'
-import type { BidError } from '@/api/bids'
-import { useAuthStore } from '@/store/authStore'
+import { FraudAlert } from '@/components/bid/FraudAlert'
+import { BidForm } from '@/components/bid/BidForm'
+import { BidHistory } from '@/components/bid/BidHistory'
 import { getErrorMessage } from '@/api/client'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { formatDistanceToNow } from 'date-fns'
-import { fadeIn, fadeUp, smooth, snappy } from '@/lib/animations'
+import { fadeIn, smooth, snappy } from '@/lib/animations'
 import { ReviewSection } from '@/components/auction/ReviewSection'
+import { useAuthStore } from '@/store/authStore'
+import type { BidError } from '@/api/bids'
 
 export function AuctionDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -29,40 +29,9 @@ export function AuctionDetailPage() {
 
   useAuctionSocket(id!)
 
-  const [bidAmount, setBidAmount] = useState('')
-  const [bidError, setBidError] = useState<BidError | null>(null)
   const [demoMode, setDemoMode] = useState(false)
   const [selectedImage, setSelectedImage] = useState(0)
-
-  const bidMutation = useMutation({
-    mutationFn: () => placeBid({
-      auctionId: id!,
-      amount: demoMode ? 999999 : Number(bidAmount),
-    }),
-    onSuccess: (data) => {
-      setBidAmount('')
-      queryClient.setQueryData(['auction', id], (old: any) => ({
-        ...old,
-        currentPrice: data.newHighestBid,
-      }))
-      toast.success(`Bid of $${data.newHighestBid.toLocaleString()} placed!`)
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error) && error.response) {
-        const data = error.response.data
-        setBidError({
-          error: data.error,
-          message: data.message,
-          currentPrice: data.currentPrice,
-          score: data.score,
-          signals: data.signals,
-          confidence: data.confidence,
-        })
-      } else {
-        toast.error(getErrorMessage(error))
-      }
-    },
-  })
+  const [bidError, setBidError] = useState<BidError | null>(null)
 
   if (isLoading) {
     return (
@@ -94,13 +63,10 @@ export function AuctionDetailPage() {
   const bids = bidsData?.bids ?? []
   const isActive = auction.status === 'ACTIVE'
   const isOwner = currentUser?.id === auction.sellerId
-  const minBid = auction.currentPrice + 1
-  const bidAmountNum = Number(bidAmount)
-  const bidValid = bidAmountNum >= minBid && !isNaN(bidAmountNum)
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
-      <FraudModal error={bidError} onClose={() => setBidError(null)} />
+      <FraudAlert error={bidError} onClose={() => setBidError(null)} />
 
       {/* Back */}
       <button
@@ -193,65 +159,14 @@ export function AuctionDetailPage() {
 
           {/* Bid form / Ended State */}
           {isActive ? (
-            !isOwner && user ? (
-              <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <div className="relative flex-1">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-tertiary text-xs font-mono">$</span>
-                    <input
-                      type="number"
-                      value={bidAmount}
-                      onChange={(e) => setBidAmount(e.target.value)}
-                      placeholder={`${minBid} USD or more`}
-                      min={minBid}
-                      className="w-full pl-8 pr-3 py-3 rounded-none border border-border-base bg-bg-surface text-xs uppercase tracking-wider text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary transition-all font-sans"
-                    />
-                  </div>
-                  <button
-                    onClick={() => bidMutation.mutate()}
-                    disabled={!bidValid || bidMutation.isPending}
-                    className="w-full sm:w-auto px-6 py-3 rounded-none bg-primary text-white text-xs uppercase tracking-widest font-semibold hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center justify-center gap-2"
-                  >
-                    {bidMutation.isPending ? (
-                      <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-none animate-spin" />
-                    ) : (
-                      <Gavel className="w-3.5 h-3.5" />
-                    )}
-                    Place Bid
-                  </button>
-                </div>
-                <p className="text-[9px] font-mono tracking-widest uppercase text-text-tertiary flex items-center gap-1.5">
-                  <Shield className="w-3 h-3 text-primary" />
-                  Protected by secure real-time verification guards
-                </p>
-
-                {/* Demo mode toggle */}
-                <button
-                  onClick={() => {
-                    setDemoMode(!demoMode)
-                    toast(demoMode ? 'Demo mode deactivated' : '🧪 Demo mode activated — next bid will trigger simulated fraud protection', {
-                      duration: 3000,
-                      style: demoMode ? {} : { background: '#FAEEDA', color: '#854F0B', border: '1px solid #FAC775' },
-                    })
-                  }}
-                  className={`flex items-center gap-1.5 font-mono text-[8px] tracking-widest uppercase px-3 py-1.5 rounded-none border transition-all cursor-pointer ${
-                    demoMode
-                      ? 'bg-warning-light border-warning/30 text-warning font-bold'
-                      : 'bg-bg-surface border-border-base text-text-tertiary hover:border-text-secondary'
-                  }`}
-                >
-                  <FlaskConical className="w-3 h-3" />
-                  {demoMode ? 'Demo active — click Bid to trigger warning' : 'Activate Demo Filter'}
-                </button>
-              </div>
-            ) : !user ? (
-              <Link
-                to="/login"
-                className="block w-full text-center py-3 rounded-none bg-primary text-white text-xs uppercase tracking-widest font-semibold hover:bg-primary-dark transition-all"
-              >
-                Sign in to place bid
-              </Link>
-            ) : null
+            <BidForm
+              auctionId={id!}
+              currentPrice={auction.currentPrice}
+              isActive={isActive}
+              isOwner={isOwner}
+              user={user}
+              setBidError={setBidError}
+            />
           ) : (
             /* ENDED STATE PANELS */
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -385,47 +300,11 @@ export function AuctionDetailPage() {
         </div>
       </div>
 
-      {/* Bid history */}
-      <div className="mt-12">
-        <h2 className="font-serif italic text-2xl text-text-primary mb-4 font-medium">
-          Bid History {bidsData?.total ? `(${bidsData.total})` : ''}
-        </h2>
-        {bids.length === 0 ? (
-          <div className="text-center py-12 bg-bg-surface rounded-none border border-border-base border-dashed">
-            <p className="text-xs font-mono tracking-widest uppercase text-text-tertiary">No bids placed yet — open bidding by placing a bid</p>
-          </div>
-        ) : (
-          <div className="bg-bg-surface rounded-none border border-border-base divide-y divide-border-base overflow-hidden shadow-sm">
-            <AnimatePresence initial={false}>
-              {bids.map((bid, i) => (
-                <motion.div
-                  key={bid.id}
-                  variants={fadeUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ ...smooth, delay: i === 0 ? 0 : 0 }}
-                  className="flex items-center justify-between px-5 py-4"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-none bg-bg-tertiary/50 border border-border-base flex items-center justify-center">
-                      <User className="w-3.5 h-3.5 text-text-tertiary" />
-                    </div>
-                    <span className="text-xs text-text-secondary font-mono">
-                      {bid.userId === currentUser?.id ? 'You' : `${bid.userId.slice(0, 8)}…`}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-mono text-sm font-bold text-text-primary">${bid.amount.toLocaleString()}</p>
-                    <p className="text-[9px] font-mono tracking-widest uppercase text-text-tertiary">
-                      {formatDistanceToNow(new Date(bid.createdAt), { addSuffix: true })}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        )}
-      </div>
+      <BidHistory
+        bids={bids}
+        total={bidsData?.total}
+        currentUserId={currentUser?.id}
+      />
 
       <ReviewSection
         auctionId={id!}
