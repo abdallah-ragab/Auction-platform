@@ -241,7 +241,7 @@ export function HomePage() {
               {/* Bottom Bid Info */}
               <div className="flex items-center justify-between border-t border-border-base/50 pt-4 font-mono text-[9px] text-text-tertiary tracking-wider uppercase">
                 <div>{featuredBidders} Bidders Active</div>
-                <div>Highest Bid: {featuredHighest}</div>
+                <div>Last Bid: Anonymous Bidder</div>
               </div>
             </div>
           </div>
@@ -287,14 +287,13 @@ export function HomePage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { name: "Fine Watches", ar: "ساعات فاخرة ورائعة", count: "3 Active Lots", desc: "Archival horology and vintage chronographs of unparalleled lineage.", link: "/search?category=watches" },
-            { name: "Vintage Glass", ar: "كاميرات نادرة وأثرية", count: "5 Active Lots", desc: "Rare analog camera equipment, classic rangefinders and premium lenses.", link: "/search?category=cameras" },
-            { name: "Original Fine Art", ar: "فنون تشكيلية ولوحات", count: "2 Active Lots", desc: "Curated contemporary paintings, lithographs, and classic Middle Eastern art.", link: "/search?category=art" },
-            { name: "Hi-Fi & Archival", ar: "أجهزة صوتية وإلكترونيات", count: "4 Active Lots", desc: "Archival audio, premium solid-state vintage electronics and systems.", link: "/search?category=electronics" }
+            { name: "Fine Watches", ar: "ساعات فاخرة ورائعة", desc: "Archival horology and vintage chronographs of unparalleled lineage.", link: "/search?category=watches" },
+            { name: "Vintage Glass", ar: "كاميرات نادرة وأثرية", desc: "Rare analog camera equipment, classic rangefinders and premium lenses.", link: "/search?category=cameras" },
+            { name: "Original Fine Art", ar: "فنون تشكيلية ولوحات", desc: "Curated contemporary paintings, lithographs, and classic Middle Eastern art.", link: "/search?category=art" },
+            { name: "Hi-Fi & Archival", ar: "أجهزة صوتية وإلكترونيات", desc: "Archival audio, premium solid-state vintage electronics and systems.", link: "/search?category=electronics" }
           ].map((dept, i) => (
             <Link key={i} to={dept.link} className="group relative block bg-bg-surface border border-border-base p-6 hover:border-primary transition-all duration-300 shadow-sm hover:shadow-md">
               <div className="absolute top-0 left-0 w-full h-[3px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-              <span className="block font-mono text-[9px] text-text-tertiary uppercase tracking-widest mb-1">{dept.count}</span>
               <h3 className="font-serif italic text-lg text-text-primary group-hover:text-primary transition-colors font-medium">{dept.name}</h3>
               <span className="block text-sm text-primary font-bold my-1 tracking-wide" style={{ fontFamily: 'Amiri, serif' }}>{dept.ar}</span>
               <p className="text-text-primary text-[11px] leading-relaxed mt-3 font-medium tracking-wide">{dept.desc}</p>
@@ -359,7 +358,8 @@ export function HomePage() {
       </section>
 
       {/* How it Works Section */}
-      <section id="how-it-works" className="bg-bg-surface border border-border-base rounded-none p-12 md:p-20 relative max-w-7xl mx-auto mx-4 scroll-mt-20">
+      <section id="how-it-works" className="px-4 max-w-7xl mx-auto scroll-mt-20">
+      <div className="bg-bg-surface border border-border-base rounded-none p-12 md:p-20 relative">
         <div className="relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="font-serif italic text-3xl md:text-5xl text-text-primary mb-4 font-medium">Master the Auction</h2>
@@ -400,6 +400,7 @@ export function HomePage() {
             ))}
           </div>
         </div>
+      </div>
       </section>
 
       <RecommendedList recommendations={recommendations || []} />
@@ -519,7 +520,8 @@ export function HomePage() {
       )}
 
       {/* Redesigned Premium CTA */}
-      <section className="relative rounded-none overflow-hidden border-2 border-primary/20 bg-bg-surface p-12 md:p-24 text-center max-w-7xl mx-auto mx-4 shadow-lg group">
+      <section className="px-4 max-w-7xl mx-auto">
+      <div className="relative rounded-none overflow-hidden border-2 border-primary/20 bg-bg-surface p-12 md:p-24 text-center shadow-lg group">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
         
         {/* Egyptian Geometric Motif Accent Corners */}
@@ -555,6 +557,7 @@ export function HomePage() {
             </Link>
           </div>
         </div>
+      </div>
       </section>
 
     </div>
